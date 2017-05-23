@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+<div class="container">
+  <%= link_to '로그아웃', destroy_user_session_path, method: 'delete' %>
+  <h1>Posts</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Show</th>
+        <th>Edit</th>
+        <th>Destroy</th>
+        <th>Like</th>
+        <th>Likes</th>
+        <th>좋아하는 사람들</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @posts.each do |post| %>
+        <tr>
+            <th scope="row"><%= post.id %></th>
+            <td><%= post.title %></td>
+            <td><%= link_to 'Show', post %></td>
+            <td><%= link_to 'Edit', edit_post_path(post) %></td>
+            <td><%= link_to 'Destroy', post, method: :delete, data: {confirm: 'Are you sure?' } %></td>
+            <td>
+              <% if current_user.is_like?(post) %>
+                <%= link_to post_like_path(post), method: "post" do %>
+                  <i class="fa fa-heart fa-lg hred" aria-hidden="true"></i>
+                <% end %>
+              <% else %>
+                <%= link_to post_like_path(post), method: "post" do %>
+                  <i class="fa fa-heart-o fa-lg hred" aria-hidden="true"></i>
+                <% end %>
+              <% end %>
+            </td>
+            <td><%= post.likes.size %></td>
+            <td>
+              <% post.liked_users.each do |x| %>
+                <p><%= x.email %>님이 좋아합니다.</p>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  <br>
+
+  <%= link_to 'New Post', new_post_path, class: 'btn btn-primary' %>
+
+</div>
